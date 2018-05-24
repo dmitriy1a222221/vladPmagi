@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="myCanvas" style="border: 2px solid black"  width="600" height="500"></canvas>
+<div id="cordBlock"></div>
+<script src="RGraph.common.core.js"></script>
+<script>
+
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+
+    var flag = false;
+
+    var x;
+    var y;
+
+    var mX = 200;
+    var mY = 200;
+
+    var mX1 = 400;
+    var mY1 = 400;
+
+    canvas.addEventListener("mousemove", function (e) {
+        function cordMouse(event) {
+            mX1 = event.clientX - canvas.getBoundingClientRect().left;
+            mY1 =  event.clientY - canvas.getBoundingClientRect().top;
+
+            canvas.onmouseup = () => canvas.removeEventListener("mousemove", cordMouse, false);
+        }
+
+        if (context.isPointInPath(x,y)){
+            canvas.onmousedown = () => canvas.addEventListener("mousemove", cordMouse , false);
+            return;
+        }
+
+        x = e.offsetX;
+        y = e.offsetY;
+
+        document.getElementById('cordBlock').innerHTML = 'x:' + x + ' ' + 'y:' + y;
+
+
+
+        // function manipulation() {
+        //     canvas.onmousedown = () => canvas.addEventListener("mousemove", function cordMouse(event) {
+        //         mX1 = event.clientX - canvas.getBoundingClientRect().left;
+        //         mY1 =  event.clientY - canvas.getBoundingClientRect().top;
+        //
+        //         canvas.onmouseup = () => canvas.removeEventListener("mousemove", cordMouse, false);
+        //     }, false);
+        //
+        // }
+    } , false);
+
+
+
+
+
+    (function draw(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.beginPath();
+        context.arc(mX1, mY1, 10, 0, 2*Math.PI, false);
+        context.fill();
+        requestAnimationFrame(draw);
+    })();
+
+
+
+
+
+
+</script>
+</body>
+</html>
